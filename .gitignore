@@ -1,0 +1,5 @@
+.decrypted~*
+.DS_Store
+age.key
+kubeconfig
+Thumbs.db
