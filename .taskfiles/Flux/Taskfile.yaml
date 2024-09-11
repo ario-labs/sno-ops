@@ -1,0 +1,33 @@
+---
+# yaml-language-server: $schema=https://taskfile.dev/schema.json
+version: "3"
+
+tasks:
+  bootstrap:
+    desc: Bootstrap Flux onto a cluster
+    prompt: Bootstrap Flux onto the '{{.cluster}}' cluster?
+    cmds:
+      - oc create namespace flux-system
+      - oc adm policy add-scc-to-user privileged system:serviceaccount:flux-system:image-automation-controller
+      - oc adm policy add-scc-to-user privileged system:serviceaccount:flux-system:image-reflector-controller
+      - oc adm policy add-scc-to-user privileged system:serviceaccount:flux-system:kustomize-controller
+      - oc adm policy add-scc-to-user privileged system:serviceaccount:flux-system:notification-controller
+      - oc adm policy add-scc-to-user privileged system:serviceaccount:flux-system:source-controller
+      # Install Flux
+      - oc --context={{.cluster}} apply --server-side --kustomize {{.OPENSHIFT_DIR}}/{{.cluster}}/bootstrap/flux
+      - sops --decrypt {{.OPENSHIFT_DIR}}/{{.cluster}}/bootstrap/flux/age-key.secret.sops.yaml | oc --context {{.cluster}} apply --server-side --filename -
+      - sops --decrypt {{.OPENSHIFT_DIR}}/{{.cluster}}/bootstrap/flux/github-deploy-key.secret.sops.yaml | oc --context {{.cluster}} apply --server-side --filename -
+      - sops --decrypt {{.OPENSHIFT_DIR}}/{{.cluster}}/flux/vars/cluster-secrets.secret.sops.yaml | oc --context {{.cluster}} apply --server-side --filename -
+      - oc --context={{.cluster}} apply --server-side --filename {{.OPENSHIFT_DIR}}/{{.cluster}}/flux/vars/cluster-settings.yaml
+      # Install Flux Kustomization resources
+      - oc --context {{.cluster}} apply --server-side --kustomize {{.OPENSHIFT_DIR}}/{{.cluster}}/flux/config
+    requires:
+      vars: ["cluster"]
+    preconditions:
+      - test -f {{.OPENSHIFT_DIR}}/{{.cluster}}/bootstrap/flux/age-key.secret.sops.yaml
+      - test -f {{.OPENSHIFT_DIR}}/{{.cluster}}/bootstrap/flux/github-deploy-key.secret.sops.yaml
+      - test -f {{.OPENSHIFT_DIR}}/{{.cluster}}/flux/vars/cluster-settings.yaml
+      - test -f {{.OPENSHIFT_DIR}}/{{.cluster}}/flux/vars/cluster-secrets.secret.sops.yaml
+      - sops --decrypt {{.OPENSHIFT_DIR}}/{{.cluster}}/bootstrap/flux/age-key.secret.sops.yaml
+      - sops --decrypt {{.OPENSHIFT_DIR}}/{{.cluster}}/bootstrap/flux/github-deploy-key.secret.sops.yaml
+      - sops --decrypt {{.OPENSHIFT_DIR}}/{{.cluster}}/flux/vars/cluster-secrets.secret.sops.yaml
