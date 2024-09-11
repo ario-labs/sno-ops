@@ -31,3 +31,6 @@ tasks:
       - sops --decrypt {{.OPENSHIFT_DIR}}/{{.cluster}}/bootstrap/flux/age-key.secret.sops.yaml
       - sops --decrypt {{.OPENSHIFT_DIR}}/{{.cluster}}/bootstrap/flux/github-deploy-key.secret.sops.yaml
       - sops --decrypt {{.OPENSHIFT_DIR}}/{{.cluster}}/flux/vars/cluster-secrets.secret.sops.yaml
+  reconcile:
+    desc: Reconcile Flux resources from the git repository
+    cmd: flux reconcile --namespace flux-system kustomization cluster --with-source
