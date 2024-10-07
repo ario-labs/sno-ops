@@ -1,13 +1,13 @@
 ---
 creation_rules:
-  - path_regex: openshift/.+\.secret(\.sops)?\.ya?ml
+  - path_regex: openshift/.+secret(\.sops)?\.ya?ml
     input_type: yaml
     encrypted_regex: ^(data|stringData)$
     mac_only_encrypted: true
     key_groups:
       - age:
           - age1pq76xc07f94c90a45fc9x9e0ylehplg25wmzrksr0yyamt5t6yfqhew74l
-  - path_regex: openshift/.+\.secret(\.sops)?\.env
+  - path_regex: openshift/.+secret(\.sops)?\.env
     input_type: env
     mac_only_encrypted: true
     key_groups:
