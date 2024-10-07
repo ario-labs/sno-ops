@@ -3,9 +3,6 @@ apiVersion: route.openshift.io/v1
 kind: Route
 metadata:
   name: vault
-  annotations:
-    cert-manager.io/issuer-kind: ClusterIssuer
-    cert-manager.io/issuer-name: letsencrypt-production
 spec:
   host: "vault.${SECRET_DOMAIN}"
   to:
