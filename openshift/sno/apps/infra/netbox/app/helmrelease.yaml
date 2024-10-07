@@ -32,10 +32,10 @@ spec:
       - secretRef:
           name: netbox-secret
     podSecurityContext:
-      fsGroup: 1000830001
+      fsGroup: 1000770000
     securityContext:
-      runAsUser: 1000830001
-      runAsGroup: 1000830001
+      runAsUser: 1000770000
+      runAsGroup: 1000770000
       runAsNonRoot: true
       privileged: false
       readOnlyRootFilesystem: true
@@ -102,27 +102,27 @@ spec:
       enabled: false
     housekeeping:
       podSecurityContext:
-        fsGroup: 1000830001
+        fsGroup: 1000770000
       securityContext:
-        runAsUser: 1000830001
-        runAsGroup: 1000830001
+        runAsUser: 1000770000
+        runAsGroup: 1000770000
     init:
       image:
         repository: docker.io/library/busybox
         tag: 1.36.1
         pullPolicy: IfNotPresent
       securityContext:
-        runAsUser: 1000830001
-        runAsGroup: 1000830001
+        runAsUser: 1000770000
+        runAsGroup: 1000770000
     updateStrategy:
       type: RollingUpdate
     worker:
       enabled: true
       podSecurityContext:
-        fsGroup: 1000830001
+        fsGroup: 1000770000
       securityContext:
-        runAsUser: 1000830001
-        runAsGroup: 1000830001
+        runAsUser: 1000770000
+        runAsGroup: 1000770000
       updateStrategy:
         type: RollingUpdate
     resources:
