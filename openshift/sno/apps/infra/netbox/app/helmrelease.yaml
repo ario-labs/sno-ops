@@ -88,7 +88,13 @@ spec:
     postgresql:
       enabled: false
     redis:
-      enabled: true
+      enabled: false
+    tasksRedis:
+      host: dragonfly.database.svc.cluster.local
+      port: 6379
+    cachingRedis:
+      host: dragonfly.database.svc.cluster.local
+      port: 6379
     externalDatabase:
       host: postgres-rw.database.svc.cluster.local
       port: 5432
