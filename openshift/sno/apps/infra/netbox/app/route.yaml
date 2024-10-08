@@ -3,9 +3,6 @@ apiVersion: route.openshift.io/v1
 kind: Route
 metadata:
   name: netbox-route
-  annotations:
-    cert-manager.io/issuer-kind: ClusterIssuer
-    cert-manager.io/issuer-name: letsencrypt-production
 spec:
   host: "netbox.${SECRET_DOMAIN}"
   to:
